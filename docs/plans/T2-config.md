@@ -17,6 +17,13 @@ config/sources.yaml
 config/mongodb.yaml
 config/scheduler.yaml
 config/output.yaml
+config/llm_config.py
+config/matching_config.py
+config/source_config.py
+config/mongo_config.py
+config/scheduler_config.py
+config/output_config.py
+config/app_config.py
 config/loader.py
 tests/test_config_loader.py
 ```
@@ -84,27 +91,28 @@ report_dir: ./output
 report_format: txt
 ```
 
+## Config Model Files (one class per file)
+
+Each Pydantic model in its own file:
+
+- `config/llm_config.py` → `LLMConfig`
+- `config/matching_config.py` → `MatchingConfig`
+- `config/source_config.py` → `SourcePolicyConfig`
+- `config/mongo_config.py` → `MongoConfig`
+- `config/scheduler_config.py` → `SchedulerConfig`
+- `config/output_config.py` → `OutputConfig`
+- `config/app_config.py` → `AppConfig` (root, imports all above)
+
 ## `config/loader.py`
 
 ```python
-class LLMConfig(BaseModel): ...
-class MatchingConfig(BaseModel): ...
-class SourceConfig(BaseModel): ...
-class MongoConfig(BaseModel): ...
-class SchedulerConfig(BaseModel): ...
-class OutputConfig(BaseModel): ...
-
-class AppConfig(BaseModel):
-    app: dict
-    llm: LLMConfig
-    matching: MatchingConfig
-    sources: dict[str, SourceConfig]
-    mongodb: MongoConfig
-    scheduler: SchedulerConfig
-    output: OutputConfig
+from config.app_config import AppConfig
 
 def load_config(config_dir: Path = Path("config")) -> AppConfig:
     """Reads all YAML files, merges, validates via Pydantic."""
+
+def reset_config_cache() -> None:
+    """Clears singleton cache. Tests only."""
 ```
 
 - MONGODB_URI from `.env` overrides `config/mongodb.yaml` if set
