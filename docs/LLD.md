@@ -107,43 +107,36 @@ report_format: txt              # txt only in Phase 1
 
 ---
 
+### Config Models (one file per concern)
+
+Each Pydantic model lives in its own file. `loader.py` only contains loading logic.
+
+```
+config/
+├── llm_config.py         # LLMConfig
+├── matching_config.py    # MatchingConfig
+├── source_config.py      # SourcePolicyConfig
+├── mongo_config.py       # MongoConfig
+├── scheduler_config.py   # SchedulerConfig
+├── output_config.py      # OutputConfig
+├── app_config.py         # AppConfig (root — imports all above)
+└── loader.py             # load_config() → AppConfig, reset_config_cache()
+```
+
 ### Config Loader (`config/loader.py`)
 
 Loads and merges all YAML files into a validated `AppConfig` Pydantic model. This is the only file that reads from `config/`. All other code receives config as a parameter.
 
 ```python
-class LLMConfig(BaseModel):
-    model: str
-    base_url: str | None
-    timeout_seconds: int
-    token_budget_per_cycle: int
+from config.app_config import AppConfig
 
-class SourceConfig(BaseModel):
-    policy: SourcePolicy
-    enabled: bool
-    max_per_run: int = 50
+def load_config(config_dir: Path = Path("config")) -> AppConfig:
+    """Reads each YAML, merges into one dict, validates via Pydantic.
+    Singleton — result cached in _config_cache after first call.
+    MONGODB_URI env var overrides config/mongodb.yaml if set."""
 
-class MatchingConfig(BaseModel):
-    score_threshold: int
-    max_per_cycle: int
-    max_concurrent_scoring: int
-
-class MongoConfig(BaseModel):
-    uri: str
-    database: str
-    test_database: str
-
-class AppConfig(BaseModel):
-    app: dict
-    llm: LLMConfig
-    matching: MatchingConfig
-    sources: dict[str, SourceConfig]
-    mongodb: MongoConfig
-    scheduler: dict
-    output: dict
-
-def load_config() -> AppConfig:
-    """Merges all files under config/ into AppConfig. Called once at startup."""
+def reset_config_cache() -> None:
+    """Clears the singleton cache. Used in tests only."""
 ```
 
 ---
@@ -843,7 +836,14 @@ job-hunt-agent/
 │   ├── mongodb.yaml
 │   ├── scheduler.yaml
 │   ├── output.yaml
-│   └── loader.py                 # merges all files into AppConfig
+│   ├── llm_config.py
+│   ├── matching_config.py
+│   ├── source_config.py
+│   ├── mongo_config.py
+│   ├── scheduler_config.py
+│   ├── output_config.py
+│   ├── app_config.py             # root AppConfig model
+│   └── loader.py                 # load_config() → AppConfig
 │
 ├── prompts/                      # all LLM prompt templates
 │   ├── profile_extraction.yaml

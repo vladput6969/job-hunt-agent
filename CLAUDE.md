@@ -13,6 +13,26 @@
 
 ---
 
+## Python Environment
+
+**Always use the project virtualenv — never install into the global Python.**
+
+- Virtualenv lives at `.venv/` in the project root (gitignored).
+- If `.venv/` does not exist, create it before doing anything else:
+  ```bash
+  python3.12 -m venv .venv
+  source .venv/bin/activate
+  pip install -r requirements.txt
+  ```
+- If `.venv/` already exists, activate it at the start of every session:
+  ```bash
+  source .venv/bin/activate
+  ```
+- All `pip install`, `python`, `pytest`, and `mypy` commands must run inside the activated venv.
+- Never run `pip install` without the venv active.
+
+---
+
 ## Project Context
 
 A locally-run, India-first AI agent that discovers, scores, and ranks job opportunities. Phase 1 is fully read-only — no outbound actions. Everything that could touch the outside world on the user's behalf is gated behind a human approval step (Phase 2+).
