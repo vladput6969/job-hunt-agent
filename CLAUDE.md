@@ -118,12 +118,34 @@ materials/       ← user's resume PDF (gitignored)
 ## Commit Workflow
 
 Before every commit, in this order:
-1. Run `python -m pytest tests/` — all tests must pass.
+1. Run `python -m pytest tests/` — all existing tests must pass (not just tests for the current file).
 2. Run `python -m mypy .` — no type errors on changed files.
 3. Never commit without explicit user confirmation ("go ahead" or "commit it").
 4. Never mention AI, Claude, or any AI tool in commit messages.
 5. Never add `Co-Authored-By` lines to commit messages.
 6. Always write a meaningful commit body — what changed and why, not just a title.
+
+### Commit Granularity
+
+Commit at logical sub-unit boundaries — not after every file, not only after a full task. Each commit must:
+- Represent one coherent piece of work (a class, a module, a feature within a task)
+- Leave the codebase in a **non-broken state** — all existing tests still pass
+- Be reviewable in isolation — a reviewer should understand the change without reading adjacent commits
+
+**Examples of good commit boundaries within a task:**
+
+| Task | Good commit splits |
+|------|--------------------|
+| T2 Config | 1) YAML files · 2) `loader.py` + Pydantic models + tests |
+| T4 Repositories | 1) `db.py` + `profile_repo` · 2) `opportunity_repo` · 3) `cycle_repo` + all repo tests |
+| T7 Sources | 1) `interfaces.py` + `registry.py` · 2) Greenhouse + Indeed sources · 3) LinkedIn + Naukri + all source tests |
+| T9 Hooks | 1) `apply_source_policy` + `apply_rate_limit` · 2) `apply_dedup` + `validate_output_schema` + `apply_budget_gate` + all hook tests |
+| T11–T13 Agents | One commit per agent + its tests |
+
+**Never commit:**
+- A file that causes existing tests to fail
+- A half-implemented class with missing required methods
+- Without tests for the code being committed (unless it is pure config/scaffold with nothing to test)
 
 ---
 
