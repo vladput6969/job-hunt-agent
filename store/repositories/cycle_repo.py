@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from pymongo.database import Database
 
 from store.cycle_record import CycleRecord
@@ -7,13 +9,13 @@ from store.db import CYCLES
 
 
 class CycleRepository:
-    def __init__(self, db: Database) -> None:
+    def __init__(self, db: Database[dict[str, Any]]) -> None:
         self._col = db[CYCLES]
 
     def create(self, cycle: CycleRecord) -> None:
         self._col.insert_one(cycle.model_dump())
 
-    def update(self, cycle_id: str, updates: dict) -> None:
+    def update(self, cycle_id: str, updates: dict[str, Any]) -> None:
         self._col.update_one({"cycle_id": cycle_id}, {"$set": updates})
 
     def get_latest(self) -> CycleRecord | None:

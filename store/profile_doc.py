@@ -11,7 +11,7 @@ class ProfileDoc(BaseModel):
     version: int
     created_at: datetime
     is_active: bool = True
-    personal: dict
+    personal: dict[str, object]
     skills: list[str]
     experience_years: float
     seniority: str

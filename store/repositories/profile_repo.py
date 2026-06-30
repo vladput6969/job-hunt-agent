@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from pymongo.database import Database
 
 from store.db import PROFILES
@@ -7,7 +9,7 @@ from store.profile_doc import ProfileDoc
 
 
 class ProfileRepository:
-    def __init__(self, db: Database) -> None:
+    def __init__(self, db: Database[dict[str, Any]]) -> None:
         self._col = db[PROFILES]
 
     def get_active(self) -> ProfileDoc | None:
