@@ -35,6 +35,13 @@ def load_config(config_dir: Path = Path("config")) -> AppConfig:
     if uri_override:
         merged["mongodb"]["uri"] = uri_override
 
+    adzuna_app_id = os.environ.get("ADZUNA_APP_ID")
+    adzuna_api_key = os.environ.get("ADZUNA_API_KEY")
+    if adzuna_app_id:
+        merged["sources"].setdefault("adzuna", {})["app_id"] = adzuna_app_id
+    if adzuna_api_key:
+        merged["sources"].setdefault("adzuna", {})["api_key"] = adzuna_api_key
+
     _config_cache = AppConfig.model_validate(merged)
     return _config_cache
 
