@@ -186,6 +186,14 @@ git push origin feature/T1-scaffold    # push branch to your fork
 # raise PR: anshulsharma1011/job-hunt-agent → vladput6969/job-hunt-agent
 ```
 
+### Merging a PR
+
+The user has collaborator rights on `vladput6969/job-hunt-agent`. Merge PRs directly via gh CLI — do not wait for the user to merge manually:
+
+```bash
+gh pr merge <number> --repo vladput6969/job-hunt-agent --merge
+```
+
 ### After a PR is Merged
 
 Sync your fork's `main` with upstream before starting the next task:
