@@ -21,6 +21,7 @@ pdfplumber>=0.11
 feedparser>=6.0
 requests>=2.32
 beautifulsoup4>=4.12
+python-jobspy>=1.1
 
 # CLI
 click>=8.1

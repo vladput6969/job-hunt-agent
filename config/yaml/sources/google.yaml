@@ -1,0 +1,6 @@
+policy: allowed
+enabled: false
+max_results: 50
+hours_old: 72
+# Disabled: jobspy Google scraper returns 0 results in India (geo-restricted).
+# Re-enable if jobspy fixes regional Google Jobs support.
