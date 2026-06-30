@@ -23,6 +23,7 @@
 | T17 | Integration Tests — Repositories | `pending` | T4 | [T17-integration-tests.md](plans/T17-integration-tests.md) |
 | T18 | End-to-End Smoke Test | `pending` | T14, T16, T17 | [T18-e2e.md](plans/T18-e2e.md) |
 | T19 | Greenhouse Slug Store (Enhancement) | `pending` | T4, T7 | — |
+| T20 | Config Layer Restructure (Enhancement) | `pending` | T2 | — |
 
 ---
 
@@ -56,3 +57,4 @@ T4 + T7 ───────────────────► T19 (greenh
 | ID | Enhancement | Notes |
 |----|-------------|-------|
 | T19 | Greenhouse Slug Store | Move Greenhouse company slugs from `config/sources.yaml` into a MongoDB `greenhouse_slugs` collection. `GreenhouseSource.fetch()` reads slugs from DB so the list can grow to 1000+ without bloating config. Seed script loads from `scripts/greenhouse_candidates.py`. |
+| T20 | Config Layer Restructure | Split `config/` into per-concern subdirectories: `config/sources/` for per-source YAML + Pydantic models, `config/app/` for global app config. Each source gets its own config file (e.g. `config/sources/greenhouse.yaml`) instead of a single monolithic `sources.yaml`. Fixes the "one blob per concern" violation and removes the overloaded `SourcePolicyConfig` class. |
