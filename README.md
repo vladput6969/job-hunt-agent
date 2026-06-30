@@ -9,10 +9,10 @@ An AI-powered, locally-run agent that discovers, scores, and ranks job opportuni
 ```bash
 git clone https://github.com/vladput6969/job-hunt-agent.git
 cd job-hunt-agent
-./setup.sh
+./scale_up.sh
 ```
 
-`setup.sh` installs and configures everything: Homebrew, Python 3.12, MongoDB, Ollama, the `llama3.1:8b` model, the Python virtualenv, and your `.env` file. Safe to re-run.
+`scale_up.sh` installs and configures everything: Homebrew, Python 3.12, MongoDB, Ollama, the `llama3.1:8b` model, the Python virtualenv, and your `.env` file. Safe to re-run.
 
 Once setup is done:
 
@@ -20,6 +20,14 @@ Once setup is done:
 source .venv/bin/activate
 python main.py
 ```
+
+## Session Scripts
+
+| Script | What it does |
+|--------|-------------|
+| `./scale_up.sh` | Install prerequisites, start MongoDB + Ollama, create venv, install dependencies |
+| `./scale_down.sh` | Stop MongoDB + Ollama services, remind you to deactivate the venv |
+| `./reset.sh` | *(coming soon)* Reset the environment |
 
 ---
 

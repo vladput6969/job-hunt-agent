@@ -1,8 +1,22 @@
 #!/usr/bin/env bash
-# setup.sh — one-shot setup for Job Hunt Agent on macOS
+# scale_up.sh — one-shot setup for Job Hunt Agent on macOS
 # Safe to re-run: every step checks before acting.
+#
+# Run directly to install/start everything (manual venv activation required):
+#   ./scale_up.sh
+#
+# Source to also auto-activate the venv in your current shell:
+#   source ./scale_up.sh
 
-set -euo pipefail
+# Detect whether we are being sourced or executed
+_SOURCED=false
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] && _SOURCED=true
+
+# Only apply strict mode when executed directly — sourcing with set -e would
+# cause any subsequent error in the parent shell to exit the terminal.
+if ! $_SOURCED; then
+  set -euo pipefail
+fi
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -14,7 +28,7 @@ NC='\033[0m'
 ok()   { echo -e "${GREEN}✓${NC} $*"; }
 info() { echo -e "${BLUE}→${NC} $*"; }
 warn() { echo -e "${YELLOW}!${NC} $*"; }
-fail() { echo -e "${RED}✗${NC} $*"; exit 1; }
+fail() { echo -e "${RED}✗${NC} $*"; $_SOURCED && return 1 || exit 1; }
 header() { echo -e "\n${BOLD}$*${NC}"; }
 
 # ── Guard ──────────────────────────────────────────────────────────────────────
@@ -25,7 +39,7 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-header "Job Hunt Agent — Setup"
+header "Job Hunt Agent — Scale Up"
 echo "This script installs all prerequisites and configures the project."
 echo "It is safe to re-run at any time."
 echo ""
@@ -213,14 +227,22 @@ else
   ok "Adzuna credentials already set in .env"
 fi
 
+# ── Virtual environment activation ────────────────────────────────────────────
+
+header "Virtual environment"
+if $_SOURCED; then
+  info "Activating venv…"
+  source "$SCRIPT_DIR/.venv/bin/activate"
+  ok "Virtual environment activated (${VIRTUAL_ENV})"
+else
+  warn "Run as a script — cannot activate the venv in your terminal. Either:"
+  echo "       source ./scale_up.sh       # auto-activates the venv"
+  echo "       source .venv/bin/activate  # or run this manually in your terminal"
+fi
+
 # ── Done ──────────────────────────────────────────────────────────────────────
 
 echo ""
-echo -e "${BOLD}Setup complete.${NC}"
-echo ""
-echo "To activate the virtual environment in your terminal:"
-echo "  source .venv/bin/activate"
-echo ""
-echo "To run the agent:"
-echo "  source .venv/bin/activate && python main.py"
+echo -e "${BOLD}Ready. To run the agent:${NC}"
+echo "  python main.py"
 echo ""
