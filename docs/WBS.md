@@ -23,7 +23,8 @@
 | T17 | Integration Tests — Repositories | `pending` | T4 | [T17-integration-tests.md](plans/T17-integration-tests.md) |
 | T18 | End-to-End Smoke Test | `pending` | T14, T16, T17 | [T18-e2e.md](plans/T18-e2e.md) |
 | T19 | Greenhouse Slug Store (Enhancement) | `pending` | T4, T7 | — |
-| T20 | Config Layer Restructure (Enhancement) | `in_progress` | T2 | — |
+| T20 | Config Layer Restructure (Enhancement) | `done` | T2 | — |
+| T21 | Glassdoor Source (Enhancement) | `pending` | T7 | — |
 
 ---
 
@@ -58,3 +59,4 @@ T4 + T7 ───────────────────► T19 (greenh
 |----|-------------|-------|
 | T19 | Greenhouse Slug Store | Move Greenhouse company slugs from `config/sources.yaml` into a MongoDB `greenhouse_slugs` collection. `GreenhouseSource.fetch()` reads slugs from DB so the list can grow to 1000+ without bloating config. Seed script loads from `scripts/greenhouse_candidates.py`. |
 | T20 | Config Layer Restructure | Split `config/` into per-concern subdirectories: `config/sources/` for per-source YAML + Pydantic models, `config/app/` for global app config. Each source gets its own config file (e.g. `config/sources/greenhouse.yaml`) instead of a single monolithic `sources.yaml`. Fixes the "one blob per concern" violation and removes the overloaded `SourcePolicyConfig` class. |
+| T21 | Glassdoor Source (Enhancement) | Add `GlassdoorSource(JobSpyBase)` with `site_name="glassdoor"`. Glassdoor returns salary range data (`min_amount`, `max_amount`, `currency`) which the scoring agent can use to rank opportunities. Implement as a 2-line subclass of `JobSpyBase` following the same pattern as `LinkedInSource`. |
