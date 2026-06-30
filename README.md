@@ -4,15 +4,40 @@ An AI-powered, locally-run agent that discovers, scores, and ranks job opportuni
 
 ---
 
+## Quick Start
+
+```bash
+git clone https://github.com/vladput6969/job-hunt-agent.git
+cd job-hunt-agent
+./scale_up.sh
+```
+
+`scale_up.sh` installs and configures everything: Homebrew, Python 3.12, MongoDB, Ollama, the `llama3.1:8b` model, the Python virtualenv, and your `.env` file. Safe to re-run.
+
+Once setup is done:
+
+```bash
+source .venv/bin/activate
+python main.py
+```
+
+## Session Scripts
+
+| Script | What it does |
+|--------|-------------|
+| `./scale_up.sh` | Install prerequisites, start MongoDB + Ollama, create venv, install dependencies |
+| `./scale_down.sh` | Stop MongoDB + Ollama services, remind you to deactivate the venv |
+| `./reset.sh` | *(coming soon)* Reset the environment |
+
+---
+
 ## Documentation
 
 | Doc | Description |
 |-----|-------------|
-| [PREREQUISITES.md](docs/PREREQUISITES.md) | What to install before anything else — written for a fresh machine |
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Original system architecture and design principles |
+| [PREREQUISITES.md](docs/PREREQUISITES.md) | Manual walkthrough of what `setup.sh` installs — useful if you prefer to install things yourself |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture, design principles, agent roster |
 | [HLD.md](docs/HLD.md) | High Level Design — components, tech stack, phased delivery |
-
-LLD and setup guides will be added as implementation progresses.
 
 ---
 
